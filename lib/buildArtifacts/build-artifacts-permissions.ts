@@ -1,7 +1,7 @@
 /**
  * SPDX-License-Identifier: Apache-2.0
  *
- * The Distronode Contributors require contributions made to
+ * The DistroNode Contributors require contributions made to
  * this file be licensed under the Apache-2.0 license or a
  * compatible open source license.
  */
@@ -32,20 +32,20 @@ export class BuildArtifactsPermissions {
       principals: [new ArnPrincipal(`${props.agentNodeArn}`)],
     }));
 
-    const distronodeBundlePolicies = BuildArtifactsPermissions.getOpensearchBundlePolicies(stack, props.buildBucketArn);
+    const distronodeBundlePolicies = BuildArtifactsPermissions.getDistronodeBundlePolicies(stack, props.buildBucketArn);
     distronodeBundlePolicies.forEach((policy) => {
       policy.attachToRole(distronodeBundleRole);
     });
   }
 
-  private static getOpensearchBundlePolicies(scope: Stack, s3BucketArn: string): Policy[] {
+  private static getDistronodeBundlePolicies(scope: Stack, s3BucketArn: string): Policy[] {
     const policies: Policy[] = [];
     const signingPolicy = new Policy(scope, 'signing-policy', {
       statements: [
         new PolicyStatement(
           {
             actions: ['sts:AssumeRole'],
-            resources: ['arn:aws:iam::447201093745:role/DistronodeSignerPGPSigning-ArtifactAccessRole'],
+            resources: ['arn:aws:iam::447201093745:role/DistroNodeSignerPGPSigning-ArtifactAccessRole'],
             effect: Effect.ALLOW,
           },
         ),

@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  jenkins:
+    image: distronodestaging/jenkins:2.387.1-lts-jdk11
+    restart: on-failure
+    privileged: true
+    tty: true
+    user: root
+    ports:
+      - 8080:8080
+      - 50000:50000
+    container_name: jenkins
+    environment:
+      - JENKINS_JAVA_OPTS=-Xms32g -Xmx64g -Dhudson.model.ParametersAction.keepUndefinedParameters=true -XX:+UseG1GC -XX:+ExplicitGCInvokesConcurrent -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:+UnlockDiagnosticVMOptions -XX:G1SummarizeRSetStatsPeriod=1
+      - CASC_RELOAD_TOKEN=reloadPasswordHere
+    volumes:
+      - /var/lib/jenkins:/var/jenkins_home
+    deploy:
+      resources:
+        limits:
+          cpus: '32'
+          memory: '65g'
+        reservations:
+          cpus: '32'
+          memory: '65g'
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: JenkinsMainNode/jenkins.log
+        awslogs-create-group: 'true'
