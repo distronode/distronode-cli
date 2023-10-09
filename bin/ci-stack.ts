@@ -1,0 +1,23 @@
+/**
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * The Distronode Contributors require contributions made to
+ * this file be licensed under the Apache-2.0 license or a
+ * compatible open source license.
+ */
+
+import { App } from 'aws-cdk-lib';
+import { CiCdnStack } from '../lib/ci-cdn-stack';
+import { CIConfigStack } from '../lib/ci-config-stack';
+import { CIStack } from '../lib/ci-stack';
+
+const app = new App();
+
+const defaultEnv: string = 'Dev';
+
+const ciConfigStack = new CIConfigStack(app, `Distronode-CI-Config-${defaultEnv}`, {});
+
+const ciStack = new CIStack(app, `Distronode-CI-${defaultEnv}`, {});
+
+const ciCdnStack = new CiCdnStack(app, `Distronode-CI-Cdn-${defaultEnv}`, {});
+ciCdnStack.addDependency(ciStack);
